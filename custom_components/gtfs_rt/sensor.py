@@ -181,10 +181,11 @@ class PublicTransportData(object):
                     if not departure_times[route_id].get(stop_id):
                         departure_times[route_id][stop_id] = []
                     # Use stop departure time; fall back on stop arrival time if not available
-                    if due_in_minutes(datetime.datetime.fromtimestamp(stop.arrival.time)) > 0:
+                    # Ignore arrival times in the past
+                    if due_in_minutes(datetime.datetime.fromtimestamp(stop.arrival.time)) >= 0:
                         details = StopDetails(
                             datetime.datetime.fromtimestamp(stop.arrival.time),
-                            vehicle_positions.get(entity.trip_update.vehicle.id)
+                            vehicle_positions.get(entity.trip_update.trip.trip_id)
                         )
                         departure_times[route_id][stop_id].append(details)
 
@@ -211,6 +212,6 @@ class PublicTransportData(object):
                 # Vehicle is not in service
                 continue
 
-            positions[vehicle.vehicle.id] = vehicle.position
+            positions[vehicle.trip.trip_id] = vehicle.position
 
         return positions
