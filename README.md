@@ -1,7 +1,9 @@
-# Home Assistant Realtime GTFS
+# Home Assistant Realtime GTFS (Queensland, Australia)
 
 This project contains a new sensor that provides real-time departure data for
 local transit systems that provide gtfs feeds.
+
+It is based on the excellent work that has been done previously by @zacs and @phardy.  It includes a number of modifications to work with realtime data for trains and buses provided by Translink in Queensland, Australia
 
 ## Installation (HACS) - Recommended
 0. Have [HACS](https://custom-components.github.io/hacs/installation/manual/) installed, this will allow you to easily update
@@ -20,29 +22,17 @@ local transit systems that provide gtfs feeds.
 Add the following to your `configuration.yaml` file:
 
 ```yaml
-# Example entry for Austin TX
+# Example entry for Queensland, Australia
 
 sensor:
   - platform: gtfs_rt
-    trip_update_url: 'https://data.texas.gov/download/rmk2-acnw/application%2foctet-stream'
-    vehicle_position_url: 'https://data.texas.gov/download/eiei-9rpf/application%2Foctet-stream'
+    trip_update_url: 'https://gtfsrt.api.translink.com.au/api/realtime/SEQ/TripUpdates'
+    vehicle_position_url: 'https://gtfsrt.api.translink.com.au/api/realtime/SEQ/VehiclePositions'
     departures:
-    - name: Downtown to airport
-      route: 100
-      stopid: 514
+    - name: Train to City
+      route: BNFG
+      stopid: 600196
 ```
-
-```yaml
-# Example entry for Seattle WA
-
-- platform: gtfs_rt
-  trip_update_url: 'http://api.pugetsound.onebusaway.org/api/gtfs_realtime/trip-updates-for-agency/1.pb?key=TEST'
-  departures:
-  - name: "48 to Uni"
-    route: 100228
-    stopid: 36800
-```
-
 
 Configuration variables:
 
@@ -51,7 +41,7 @@ Configuration variables:
 - **api_key** (*Optional*): If provided, this key will be sent with API
 requests in an "Authorization" header.
 - **departures** (*Required*): A list of routes and departure locations to watch
-- **route** (*Optional*): The name of the gtfs route
+- **route** (*Optional*): The name of the gtfs route.  For que
 - **stopid** (*Optional*): The stopid for the location you want etas for
 
 ## Screenshot
@@ -59,6 +49,8 @@ requests in an "Authorization" header.
 ![screenshot](https://i.imgur.com/VMcX9aG.png)
 
 ## Finding Feeds
+
+
 
 [Transit Feeds](https://transitfeeds.com) is a fairly good source for realtime
 gtfs feeds. Search for your city, and then look for a feed that is tagged with
