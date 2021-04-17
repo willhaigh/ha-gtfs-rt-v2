@@ -164,7 +164,15 @@ class PublicTransportData(object):
 
         for entity in feed.entity:
             if entity.HasField('trip_update'):
-                route_id = entity.trip_update.trip.route_id
+                # route_id = entity.trip_update.trip.route_id
+                # SEQ Translink has route IDs in following format <route no>-<calendar>
+                # So split the route id from the feed and just use the route no
+                route_id_split = entity.trip_update.trip.route_id.split('-')
+                if route_id_split[0] == '-':
+                      route_id = entity.trip_update.trip.route_id
+                else:
+                      route_id = route_id_split[0]
+                
                 if route_id not in departure_times:
                     departure_times[route_id] = {}
 
