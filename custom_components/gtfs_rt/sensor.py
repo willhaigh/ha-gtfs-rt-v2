@@ -213,5 +213,6 @@ class PublicTransportData(object):
                 continue
 
             positions[vehicle.trip.trip_id] = vehicle.position
+            
 
         return positions
