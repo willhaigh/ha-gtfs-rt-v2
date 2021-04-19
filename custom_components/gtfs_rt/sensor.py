@@ -31,7 +31,7 @@ CONF_DEPARTURES = 'departures'
 CONF_TRIP_UPDATE_URL = 'trip_update_url'
 CONF_VEHICLE_POSITION_URL = 'vehicle_position_url'
 CONF_ICON = 'icon'
-CONF_FRIENDLY_NAME = 'friendlyname'
+CONF_FRIENDLY_NAME = 'friendly_name'
 
 DEFAULT_NAME = 'Next Bus'
 DEFAULT_ICON = 'mdi:bus'
