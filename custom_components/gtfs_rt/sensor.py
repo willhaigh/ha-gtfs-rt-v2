@@ -71,6 +71,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
             departure.get(CONF_STOP_ID),
             departure.get(CONF_ROUTE),
             departure.get(CONF_ICON),
+            departure.get(CONF_FRIENDLY_NAME),
             departure.get(CONF_NAME)
         ))
 
@@ -87,6 +88,7 @@ class PublicTransportSensor(Entity):
         self._stop = stop
         self._route = route
         self._icon = icon
+        self._friendly_name = friendly_name
         self.update()
 
     @property
@@ -131,11 +133,7 @@ class PublicTransportSensor(Entity):
 
     @property
     def friendly_name(self):
-        """Icon to use in the frontend, if any."""
-        if len(CONF_FRIENDLY_NAME) > 0:
-            return CONF_FRIENDLY_NAME
-        else:
-            return self._name
+        return self._friendly_name
 
     def update(self):
         """Get the latest data from opendata.ch and update the states."""
