@@ -5,7 +5,7 @@ import requests
 import voluptuous as vol
 
 from homeassistant.components.sensor import PLATFORM_SCHEMA
-from homeassistant.const import (CONF_NAME, ATTR_LONGITUDE, ATTR_LATITUDE, CONF_FRIENDLY_NAME)
+from homeassistant.const import (CONF_NAME, ATTR_LONGITUDE, ATTR_LATITUDE)
 import homeassistant.util.dt as dt_util
 from homeassistant.helpers.entity import Entity
 from homeassistant.util import Throttle
@@ -48,8 +48,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
         vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
         vol.Required(CONF_STOP_ID): cv.string,
         vol.Required(CONF_ROUTE): cv.string,
-        vol.Optional(CONF_ICON, default=DEFAULT_ICON): cv.string,
-        vol.Optional(CONF_FRIENDLY_NAME): cv.string
+        vol.Optional(CONF_ICON, default=DEFAULT_ICON): cv.string
     }]
 })
 
@@ -70,7 +69,6 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
             departure.get(CONF_STOP_ID),
             departure.get(CONF_ROUTE),
             departure.get(CONF_ICON),
-            departure.get(CONF_FRIENDLY_NAME),
             departure.get(CONF_NAME)
         ))
 
@@ -80,14 +78,13 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 class PublicTransportSensor(Entity):
     """Implementation of a public transport sensor."""
 
-    def __init__(self, data, stop, route, icon, friendly_name, name):
+    def __init__(self, data, stop, route, icon, name):
         """Initialize the sensor."""
         self.data = data
         self._name = name
         self._stop = stop
         self._route = route
         self._icon = icon
-        self._friendly_name = friendly_name
         self.update()
 
     @property
@@ -129,10 +126,6 @@ class PublicTransportSensor(Entity):
     @property
     def icon(self):
         return self._icon
-
-    @property
-    def friendly_name(self):
-        return self._friendly_name
 
     def update(self):
         """Get the latest data from opendata.ch and update the states."""
