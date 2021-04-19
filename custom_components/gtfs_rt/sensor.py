@@ -78,12 +78,13 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 class PublicTransportSensor(Entity):
     """Implementation of a public transport sensor."""
 
-    def __init__(self, data, stop, route, name):
+    def __init__(self, data, stop, route, icon, name):
         """Initialize the sensor."""
         self.data = data
         self._name = name
         self._stop = stop
         self._route = route
+        self._icon = icon
         self.update()
 
     @property
@@ -124,11 +125,7 @@ class PublicTransportSensor(Entity):
 
     @property
     def icon(self):
-        """Icon to use in the frontend, if any."""
-        if len(CONF_ICON) > 0:
-            return CONF_ICON
-        else:
-            return DEFAULT_ICON
+        return self._icon
 
     @property
     def friendly_name(self):
