@@ -47,7 +47,8 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_DEPARTURES): [{
         vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
         vol.Required(CONF_STOP_ID): cv.string,
-        vol.Required(CONF_ROUTE): cv.string
+        vol.Required(CONF_ROUTE): cv.string,
+        vol.Optional(CONF_FRIENDLY_NAME): cv.string
     }]
 })
 
