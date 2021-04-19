@@ -23,6 +23,7 @@ ATTR_ROUTE = "Route"
 ATTR_DUE_IN = "Due in"
 ATTR_DUE_AT = "Due at"
 ATTR_NEXT_UP = "Next bus"
+ATTR_ICON = "Icon"
 
 CONF_API_KEY = 'api_key'
 CONF_STOP_ID = 'stopid'
