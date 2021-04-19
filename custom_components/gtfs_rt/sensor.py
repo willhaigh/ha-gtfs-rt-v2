@@ -70,6 +70,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
             data,
             departure.get(CONF_STOP_ID),
             departure.get(CONF_ROUTE),
+            departure.get(CONF_ICON),
             departure.get(CONF_NAME)
         ))
 
