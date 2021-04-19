@@ -5,7 +5,7 @@ import requests
 import voluptuous as vol
 
 from homeassistant.components.sensor import PLATFORM_SCHEMA
-from homeassistant.const import (CONF_NAME, ATTR_LONGITUDE, ATTR_LATITUDE)
+from homeassistant.const import (CONF_NAME, ATTR_LONGITUDE, ATTR_LATITUDE, CONF_FRIENDLY_NAME)
 import homeassistant.util.dt as dt_util
 from homeassistant.helpers.entity import Entity
 from homeassistant.util import Throttle
@@ -32,7 +32,6 @@ CONF_DEPARTURES = 'departures'
 CONF_TRIP_UPDATE_URL = 'trip_update_url'
 CONF_VEHICLE_POSITION_URL = 'vehicle_position_url'
 CONF_ICON = 'icon'
-CONF_FRIENDLY_NAME = 'friendly_name'
 
 DEFAULT_NAME = 'Next Bus'
 DEFAULT_ICON = 'mdi:bus'
