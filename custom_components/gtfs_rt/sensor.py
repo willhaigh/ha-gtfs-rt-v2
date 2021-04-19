@@ -30,9 +30,11 @@ CONF_ROUTE = 'route'
 CONF_DEPARTURES = 'departures'
 CONF_TRIP_UPDATE_URL = 'trip_update_url'
 CONF_VEHICLE_POSITION_URL = 'vehicle_position_url'
+CONF_ICON = 'icon'
+CONF_FRIENDLY_NAME = 'friendlyname'
 
 DEFAULT_NAME = 'Next Bus'
-ICON = 'mdi:bus'
+DEFAULT_ICON = 'mdi:bus'
 
 MIN_TIME_BETWEEN_UPDATES = datetime.timedelta(seconds=60)
 TIME_STR_FORMAT = "%H:%M"
@@ -121,7 +123,18 @@ class PublicTransportSensor(Entity):
     @property
     def icon(self):
         """Icon to use in the frontend, if any."""
-        return ICON
+        if len(CONF_ICON) > 0:
+            return CONF_ICON
+        else:
+            return DEFAULT_ICON
+
+    @property
+    def friendly_name(self):
+        """Icon to use in the frontend, if any."""
+        if len(CONF_FRIENDLY_NAME) > 0:
+            return CONF_FRIENDLY_NAME
+        else:
+            return self._name
 
     def update(self):
         """Get the latest data from opendata.ch and update the states."""
