@@ -80,7 +80,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 class PublicTransportSensor(Entity):
     """Implementation of a public transport sensor."""
 
-    def __init__(self, data, stop, route, icon, name, service_type):
+    def __init__(self, data, stop, route, icon, service_type, name):
         """Initialize the sensor."""
         self.data = data
         self._name = name
