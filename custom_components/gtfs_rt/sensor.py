@@ -107,6 +107,7 @@ class PublicTransportSensor(Entity):
     def device_state_attributes(self):
         """Return the state attributes."""
         next_services = self._get_next_services()
+        ATTR_NEXT_UP = "Next " + self._service_type
         attrs = {
             ATTR_DUE_IN: self.state,
             ATTR_STOP_ID: self._stop,
