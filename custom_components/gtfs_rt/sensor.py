@@ -33,7 +33,7 @@ CONF_TRIP_UPDATE_URL = 'trip_update_url'
 CONF_VEHICLE_POSITION_URL = 'vehicle_position_url'
 CONF_ICON = 'icon'
 
-DEFAULT_NAME = 'Next Bus'
+DEFAULT_NEXT_UP = 'Next Bus'
 DEFAULT_ICON = 'mdi:bus'
 
 MIN_TIME_BETWEEN_UPDATES = datetime.timedelta(seconds=60)
@@ -45,7 +45,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_API_KEY): cv.string,
     vol.Optional(CONF_VEHICLE_POSITION_URL): cv.string,
     vol.Optional(CONF_DEPARTURES): [{
-        vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
+        vol.Required(CONF_NAME): cv.string,
         vol.Required(CONF_STOP_ID): cv.string,
         vol.Required(CONF_ROUTE): cv.string,
         vol.Optional(CONF_ICON, default=DEFAULT_ICON): cv.string
