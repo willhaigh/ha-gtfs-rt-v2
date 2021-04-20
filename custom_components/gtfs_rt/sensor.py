@@ -22,7 +22,7 @@ ATTR_STOP_ID = "Stop ID"
 ATTR_ROUTE = "Route"
 ATTR_DUE_IN = "Due in"
 ATTR_DUE_AT = "Due at"
-ATTR_NEXT_UP = "Next bus"
+ATTR_NEXT_UP = "Next Service"
 ATTR_ICON = "Icon"
 
 CONF_API_KEY = 'api_key'
@@ -32,13 +32,13 @@ CONF_DEPARTURES = 'departures'
 CONF_TRIP_UPDATE_URL = 'trip_update_url'
 CONF_VEHICLE_POSITION_URL = 'vehicle_position_url'
 CONF_ICON = 'icon'
+CONF_SERVICE_TYPE = 'service_type'
 
-DEFAULT_NEXT_UP = 'Next Bus'
+DEFAULT_SERVICE = 'Service'
 DEFAULT_ICON = 'mdi:bus'
 
 MIN_TIME_BETWEEN_UPDATES = datetime.timedelta(seconds=60)
 TIME_STR_FORMAT = "%H:%M"
-
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_TRIP_UPDATE_URL): cv.string,
@@ -48,7 +48,8 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
         vol.Required(CONF_NAME): cv.string,
         vol.Required(CONF_STOP_ID): cv.string,
         vol.Required(CONF_ROUTE): cv.string,
-        vol.Optional(CONF_ICON, default=DEFAULT_ICON): cv.string
+        vol.Optional(CONF_ICON, default=DEFAULT_ICON): cv.string,
+        vol.Optional(CONF_SERVICE_TYPE, default=DEFAULT_SERVICE): cv.string
     }]
 })
 
@@ -78,44 +79,45 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 class PublicTransportSensor(Entity):
     """Implementation of a public transport sensor."""
 
-    def __init__(self, data, stop, route, icon, name):
+    def __init__(self, data, stop, route, icon, name, service_type):
         """Initialize the sensor."""
         self.data = data
         self._name = name
         self._stop = stop
         self._route = route
         self._icon = icon
+        self._service_type = service_type
         self.update()
 
     @property
     def name(self):
         return self._name
 
-    def _get_next_buses(self):
+    def _get_next_services(self):
         return self.data.info.get(self._route, {}).get(self._stop, [])
 
     @property
     def state(self):
         """Return the state of the sensor."""
-        next_buses = self._get_next_buses()
-        return due_in_minutes(next_buses[0].arrival_time) if len(next_buses) > 0 else '-'
+        next_services = self._get_next_services()
+        return due_in_minutes(next_services[0].arrival_time) if len(next_services) > 0 else '-'
 
     @property
     def device_state_attributes(self):
         """Return the state attributes."""
-        next_buses = self._get_next_buses()
+        next_services = self._get_next_services()
         attrs = {
             ATTR_DUE_IN: self.state,
             ATTR_STOP_ID: self._stop,
             ATTR_ROUTE: self._route
         }
-        if len(next_buses) > 0:
-            attrs[ATTR_DUE_AT] = next_buses[0].arrival_time.strftime('%I:%M %p') if len(next_buses) > 0 else '-'
-            if next_buses[0].position:
-                attrs[ATTR_LATITUDE] = next_buses[0].position.latitude
-                attrs[ATTR_LONGITUDE] = next_buses[0].position.longitude
-        if len(next_buses) > 1:
-            attrs[ATTR_NEXT_UP] = next_buses[1].arrival_time.strftime('%I:%M %p') if len(next_buses) > 1 else '-'
+        if len(next_services) > 0:
+            attrs[ATTR_DUE_AT] = next_services[0].arrival_time.strftime('%I:%M %p') if len(next_services) > 0 else '-'
+            if next_services[0].position:
+                attrs[ATTR_LATITUDE] = next_services[0].position.latitude
+                attrs[ATTR_LONGITUDE] = next_services[0].position.longitude
+        if len(next_services) > 1:
+            attrs[ATTR_NEXT_UP] = next_services[1].arrival_time.strftime('%I:%M %p') if len(next_services) > 1 else '-'
         return attrs
 
     @property
@@ -126,6 +128,10 @@ class PublicTransportSensor(Entity):
     @property
     def icon(self):
         return self._icon
+
+    @property
+    def service_type(self):
+        return self._service_type
 
     def update(self):
         """Get the latest data from opendata.ch and update the states."""
@@ -184,7 +190,6 @@ class PublicTransportData(object):
                     stop_id = stop.stop_id
                     if not departure_times[route_id].get(stop_id):
                         departure_times[route_id][stop_id] = []
-                    # Use stop departure time; fall back on stop arrival time if not available
                     # Use stop arrival time; fall back on stop departure time if not available
                     if stop.arrival.time == 0:
                         stop_time = stop.departure.time
