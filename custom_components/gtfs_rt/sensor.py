@@ -64,6 +64,10 @@ def due_in_minutes(timestamp):
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Get the Dublin public transport sensor."""
+    _LOGGER.debug("trip_update_url:")
+    #_LOGGER.debug("vehicle_position_url: {}".format(vehicle_position_url))
+    #_LOGGER.debug("route_delimiter: {0}".format(route_delimiter))
+    
     data = PublicTransportData(config.get(CONF_TRIP_UPDATE_URL), config.get(CONF_VEHICLE_POSITION_URL), config.get(CONF_ROUTE_DELIMITER), config.get(CONF_API_KEY))
     sensors = []
     for departure in config.get(CONF_DEPARTURES):
@@ -156,10 +160,6 @@ class PublicTransportData(object):
             self._headers = None
         self.info = {}
         
-    _LOGGER.debug("trip_update_url:")
-    #_LOGGER.debug("vehicle_position_url: {}".format(vehicle_position_url))
-    #_LOGGER.debug("route_delimiter: {0}".format(route_delimiter))
-    
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     def update(self):
         positions = self._get_vehicle_positions() if self._vehicle_position_url else {}
