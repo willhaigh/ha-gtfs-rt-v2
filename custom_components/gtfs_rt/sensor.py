@@ -64,9 +64,6 @@ def due_in_minutes(timestamp):
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Get the Dublin public transport sensor."""
-    _LOGGER.info("trip_update_url: {}".format(config.get.CONF_TRIP_UPDATE_URL)))
-    #_LOGGER.debug("vehicle_position_url: {}".format(vehicle_position_url))
-    #_LOGGER.debug("route_delimiter: {0}".format(route_delimiter))
     
     data = PublicTransportData(config.get(CONF_TRIP_UPDATE_URL), config.get(CONF_VEHICLE_POSITION_URL), config.get(CONF_ROUTE_DELIMITER), config.get(CONF_API_KEY))
     sensors = []
@@ -148,6 +145,10 @@ class PublicTransportSensor(Entity):
 
 class PublicTransportData(object):
     """The Class for handling the data retrieval."""
+
+    _LOGGER.info("trip_update_url: {}".format(trip_update_url))
+    #_LOGGER.debug("vehicle_position_url: {}".format(vehicle_position_url))
+    #_LOGGER.debug("route_delimiter: {0}".format(route_delimiter))
 
     def __init__(self, trip_update_url, vehicle_position_url=None, route_delimiter=None, api_key=None):
         """Initialize the info object."""
