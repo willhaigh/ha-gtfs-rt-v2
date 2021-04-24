@@ -37,7 +37,6 @@ CONF_ROUTE_DELIMITER = 'route_delimiter'
 
 DEFAULT_SERVICE = 'Service'
 DEFAULT_ICON = 'mdi:bus'
-DEFAULT_ROUTE_DELIMITER = ''
 
 MIN_TIME_BETWEEN_UPDATES = datetime.timedelta(seconds=60)
 TIME_STR_FORMAT = "%H:%M"
@@ -46,7 +45,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_TRIP_UPDATE_URL): cv.string,
     vol.Optional(CONF_API_KEY): cv.string,
     vol.Optional(CONF_VEHICLE_POSITION_URL): cv.string,
-    vol.Optional(CONF_ROUTE_DELIMITER, default=DEFAULT_ROUTE_DELIMITER): cv.string,
+    vol.Optional(CONF_ROUTE_DELIMITER): cv.string,
     vol.Optional(CONF_DEPARTURES): [{
         vol.Required(CONF_NAME): cv.string,
         vol.Required(CONF_STOP_ID): cv.string,
@@ -181,7 +180,7 @@ class PublicTransportData(object):
         for entity in feed.entity:
             if entity.HasField('trip_update'):
                 # If delimiter specified split the route id in the gtfs rt feed
-                if len(self._route_delimiter) >0:
+                if self._route_delimiter is not None:
                     route_id_split = entity.trip_update.trip.route_id.split(self._route_delimiter)
                     if route_id_split[0] == self._route_delimiter:
                           route_id = entity.trip_update.trip.route_id
