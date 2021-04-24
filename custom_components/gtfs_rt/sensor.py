@@ -33,9 +33,11 @@ CONF_TRIP_UPDATE_URL = 'trip_update_url'
 CONF_VEHICLE_POSITION_URL = 'vehicle_position_url'
 CONF_ICON = 'icon'
 CONF_SERVICE_TYPE = 'service_type'
+CONF_DELIMITER = 'delimiter'
 
 DEFAULT_SERVICE = 'Service'
 DEFAULT_ICON = 'mdi:bus'
+DEFAULT_DELIMITER = ''
 
 MIN_TIME_BETWEEN_UPDATES = datetime.timedelta(seconds=60)
 TIME_STR_FORMAT = "%H:%M"
@@ -49,7 +51,8 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
         vol.Required(CONF_STOP_ID): cv.string,
         vol.Required(CONF_ROUTE): cv.string,
         vol.Optional(CONF_ICON, default=DEFAULT_ICON): cv.string,
-        vol.Optional(CONF_SERVICE_TYPE, default=DEFAULT_SERVICE): cv.string
+        vol.Optional(CONF_SERVICE_TYPE, default=DEFAULT_SERVICE): cv.string,
+        vol.Optional(CONF_DELIMITER, default=DEFAULT_DELIMITER): cv.string
     }]
 })
 
@@ -71,6 +74,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
             departure.get(CONF_ROUTE),
             departure.get(CONF_ICON),
             departure.get(CONF_SERVICE_TYPE),
+            departure.get(CONF_DELIMITER),
             departure.get(CONF_NAME)
         ))
 
@@ -80,7 +84,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 class PublicTransportSensor(Entity):
     """Implementation of a public transport sensor."""
 
-    def __init__(self, data, stop, route, icon, service_type, name):
+    def __init__(self, data, stop, route, icon, service_type, delimiter, name):
         """Initialize the sensor."""
         self.data = data
         self._name = name
@@ -88,6 +92,7 @@ class PublicTransportSensor(Entity):
         self._route = route
         self._icon = icon
         self._service_type = service_type
+        self._delimiter = delimiter
         self.update()
 
     @property
@@ -135,6 +140,10 @@ class PublicTransportSensor(Entity):
     def service_type(self):
         return self._service_type
 
+    @property
+    def delimiter(self):
+        return self._delimiter
+    
     def update(self):
         """Get the latest data from opendata.ch and update the states."""
         self.data.update()
@@ -179,8 +188,8 @@ class PublicTransportData(object):
                 # route_id = entity.trip_update.trip.route_id
                 # SEQ Translink has route IDs in following format <route no>-<calendar>
                 # So split the route id from the feed and just use the route no
-                route_id_split = entity.trip_update.trip.route_id.split('-')
-                if route_id_split[0] == '-':
+                route_id_split = entity.trip_update.trip.route_id.split(self._delimiter)
+                if route_id_split[0] == self._delimiter:
                       route_id = entity.trip_update.trip.route_id
                 else:
                       route_id = route_id_split[0]
