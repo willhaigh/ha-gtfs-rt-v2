@@ -181,12 +181,14 @@ class PublicTransportData(object):
             if entity.HasField('trip_update'):
                 # If delimiter specified split the route id in the gtfs rt feed
                 if self._route_delimiter is not None:
+                    _LOGGER.debug("has delimiter {}".format(self_route_delimiter))
                     route_id_split = entity.trip_update.trip.route_id.split(self._route_delimiter)
                     if route_id_split[0] == self._route_delimiter:
                           route_id = entity.trip_update.trip.route_id
                     else:
                           route_id = route_id_split[0]
                 else:
+                    _LOGGER.debug("no delimiter specified")
                     route_id = entity.trip_update.trip.route_id
                 
                 if route_id not in departure_times:
