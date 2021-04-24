@@ -31,9 +31,9 @@ CONF_ROUTE = 'route'
 CONF_DEPARTURES = 'departures'
 CONF_TRIP_UPDATE_URL = 'trip_update_url'
 CONF_VEHICLE_POSITION_URL = 'vehicle_position_url'
+CONF_ROUTE_DELIMITER = 'route_delimiter'
 CONF_ICON = 'icon'
 CONF_SERVICE_TYPE = 'service_type'
-CONF_ROUTE_DELIMITER = 'route_delimiter'
 
 DEFAULT_SERVICE = 'Service'
 DEFAULT_ICON = 'mdi:bus'
@@ -64,7 +64,7 @@ def due_in_minutes(timestamp):
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Get the Dublin public transport sensor."""
-    data = PublicTransportData(config.get(CONF_TRIP_UPDATE_URL), config.get(CONF_VEHICLE_POSITION_URL), config.get(CONF_API_KEY))
+    data = PublicTransportData(config.get(CONF_TRIP_UPDATE_URL), config.get(CONF_VEHICLE_POSITION_URL), config.get(CONF_ROUTE_DELIMITER), config.get(CONF_API_KEY))
     sensors = []
     for departure in config.get(CONF_DEPARTURES):
         sensors.append(PublicTransportSensor(
@@ -155,7 +155,11 @@ class PublicTransportData(object):
         else:
             self._headers = None
         self.info = {}
-
+        
+    _LOGGER.debug("trip_update_url {}".format(self._vehicle_position_url))
+    _LOGGER.debug("vehicle_position_url {}".format(self._vehicle_position_url))
+    _LOGGER.debug("route_delimiter {}".format(self._route_delimiter))
+    
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     def update(self):
         positions = self._get_vehicle_positions() if self._vehicle_position_url else {}
@@ -181,14 +185,12 @@ class PublicTransportData(object):
             if entity.HasField('trip_update'):
                 # If delimiter specified split the route id in the gtfs rt feed
                 if self._route_delimiter is not None:
-                    _LOGGER.debug("has delimiter {}".format(self_route_delimiter))
                     route_id_split = entity.trip_update.trip.route_id.split(self._route_delimiter)
                     if route_id_split[0] == self._route_delimiter:
                           route_id = entity.trip_update.trip.route_id
                     else:
                           route_id = route_id_split[0]
                 else:
-                    _LOGGER.debug("no delimiter specified")
                     route_id = entity.trip_update.trip.route_id
                 
                 if route_id not in departure_times:
