@@ -64,7 +64,7 @@ def due_in_minutes(timestamp):
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Get the Dublin public transport sensor."""
-    _LOGGER.debug("trip_update_url: {}".format(CONF_TRIP_UPDATE_URL))
+    _LOGGER.info("trip_update_url: {}".format(config.get.CONF_TRIP_UPDATE_URL)))
     #_LOGGER.debug("vehicle_position_url: {}".format(vehicle_position_url))
     #_LOGGER.debug("route_delimiter: {0}".format(route_delimiter))
     
