@@ -156,9 +156,9 @@ class PublicTransportData(object):
             self._headers = None
         self.info = {}
         
-    _LOGGER.debug("trip_update_url: {}".format(trip_update_url))
+    _LOGGER.debug("trip_update_url: {0}".format("hello"))
     _LOGGER.debug("vehicle_position_url: {}".format(vehicle_position_url))
-    _LOGGER.debug("route_delimiter: {}".format(route_delimiter))
+    _LOGGER.debug("route_delimiter: {0}".format(route_delimiter))
     
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     def update(self):
