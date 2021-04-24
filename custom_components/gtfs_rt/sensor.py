@@ -146,7 +146,7 @@ class PublicTransportSensor(Entity):
 class PublicTransportData(object):
     """The Class for handling the data retrieval."""
 
-    def __init__(self, trip_update_url, vehicle_position_url=None, api_key=None, route_delimiter=None):
+    def __init__(self, trip_update_url, vehicle_position_url=None, route_delimiter=None, api_key=None):
         """Initialize the info object."""
         self._trip_update_url = trip_update_url
         self._vehicle_position_url = vehicle_position_url
