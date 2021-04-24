@@ -156,7 +156,7 @@ class PublicTransportData(object):
             self._headers = None
         self.info = {}
         
-    _LOGGER.debug("trip_update_url: {}".trip_update_url))
+    _LOGGER.debug("trip_update_url: {}".format(trip_update_url))
     _LOGGER.debug("vehicle_position_url: {}".format(vehicle_position_url))
     _LOGGER.debug("route_delimiter: {}".format(route_delimiter))
     
