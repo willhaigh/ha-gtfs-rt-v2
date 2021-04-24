@@ -33,11 +33,11 @@ CONF_TRIP_UPDATE_URL = 'trip_update_url'
 CONF_VEHICLE_POSITION_URL = 'vehicle_position_url'
 CONF_ICON = 'icon'
 CONF_SERVICE_TYPE = 'service_type'
-CONF_DELIMITER = 'delimiter'
+CONF_ROUTE_DELIMITER = 'route_delimiter'
 
 DEFAULT_SERVICE = 'Service'
 DEFAULT_ICON = 'mdi:bus'
-DEFAULT_DELIMITER = ''
+DEFAULT_ROUTE_DELIMITER = ''
 
 MIN_TIME_BETWEEN_UPDATES = datetime.timedelta(seconds=60)
 TIME_STR_FORMAT = "%H:%M"
@@ -46,13 +46,13 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_TRIP_UPDATE_URL): cv.string,
     vol.Optional(CONF_API_KEY): cv.string,
     vol.Optional(CONF_VEHICLE_POSITION_URL): cv.string,
+    vol.Optional(CONF_ROUTE_DELIMITER, default=DEFAULT_ROUTE_DELIMITER): cv.string,
     vol.Optional(CONF_DEPARTURES): [{
         vol.Required(CONF_NAME): cv.string,
         vol.Required(CONF_STOP_ID): cv.string,
         vol.Required(CONF_ROUTE): cv.string,
         vol.Optional(CONF_ICON, default=DEFAULT_ICON): cv.string,
-        vol.Optional(CONF_SERVICE_TYPE, default=DEFAULT_SERVICE): cv.string,
-        vol.Optional(CONF_DELIMITER, default=DEFAULT_DELIMITER): cv.string
+        vol.Optional(CONF_SERVICE_TYPE, default=DEFAULT_SERVICE): cv.string
     }]
 })
 
@@ -74,7 +74,6 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
             departure.get(CONF_ROUTE),
             departure.get(CONF_ICON),
             departure.get(CONF_SERVICE_TYPE),
-            departure.get(CONF_DELIMITER),
             departure.get(CONF_NAME)
         ))
 
@@ -84,7 +83,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 class PublicTransportSensor(Entity):
     """Implementation of a public transport sensor."""
 
-    def __init__(self, data, stop, route, icon, service_type, delimiter, name):
+    def __init__(self, data, stop, route, icon, service_type, name):
         """Initialize the sensor."""
         self.data = data
         self._name = name
@@ -92,7 +91,6 @@ class PublicTransportSensor(Entity):
         self._route = route
         self._icon = icon
         self._service_type = service_type
-        self._delimiter = delimiter
         self.update()
 
     @property
@@ -140,10 +138,6 @@ class PublicTransportSensor(Entity):
     def service_type(self):
         return self._service_type
 
-    @property
-    def delimiter(self):
-        return self._delimiter
-    
     def update(self):
         """Get the latest data from opendata.ch and update the states."""
         self.data.update()
@@ -152,10 +146,11 @@ class PublicTransportSensor(Entity):
 class PublicTransportData(object):
     """The Class for handling the data retrieval."""
 
-    def __init__(self, trip_update_url, vehicle_position_url=None, api_key=None):
+    def __init__(self, trip_update_url, vehicle_position_url=None, api_key=None, route_delimiter=None):
         """Initialize the info object."""
         self._trip_update_url = trip_update_url
         self._vehicle_position_url = vehicle_position_url
+        self._route_delimiter = route_delimiter
         if api_key is not None:
             self._headers = {'Authorization': api_key}
         else:
@@ -185,14 +180,15 @@ class PublicTransportData(object):
 
         for entity in feed.entity:
             if entity.HasField('trip_update'):
-                # route_id = entity.trip_update.trip.route_id
-                # SEQ Translink has route IDs in following format <route no>-<calendar>
-                # So split the route id from the feed and just use the route no
-                route_id_split = entity.trip_update.trip.route_id.split(self._delimiter)
-                if route_id_split[0] == self._delimiter:
-                      route_id = entity.trip_update.trip.route_id
+                # If delimiter specified split the route id in the gtfs rt feed
+                if len(self._route_delimiter) >0:
+                    route_id_split = entity.trip_update.trip.route_id.split(self._route_delimiter)
+                    if route_id_split[0] == self._route_delimiter:
+                          route_id = entity.trip_update.trip.route_id
+                    else:
+                          route_id = route_id_split[0]
                 else:
-                      route_id = route_id_split[0]
+                    route_id = entity.trip_update.trip.route_id
                 
                 if route_id not in departure_times:
                     departure_times[route_id] = {}
