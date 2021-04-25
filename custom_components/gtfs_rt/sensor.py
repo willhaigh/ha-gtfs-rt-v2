@@ -63,7 +63,7 @@ def due_in_minutes(timestamp):
 
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
-    """Get the Dublin public transport sensor."""
+    """Get the public transport sensor."""
     
     data = PublicTransportData(config.get(CONF_TRIP_UPDATE_URL), config.get(CONF_VEHICLE_POSITION_URL), config.get(CONF_ROUTE_DELIMITER), config.get(CONF_API_KEY))
     sensors = []
@@ -177,8 +177,10 @@ class PublicTransportData(object):
 
         feed = gtfs_realtime_pb2.FeedMessage()
         response = requests.get(self._trip_update_url, headers=self._headers)
-        if response.status_code != 200:
-            _LOGGER.error("updating route status got {}:{}".format(response.status_code,response.content))
+        if response.status_code == 200:
+            _LOGGER.info("Successfully updated trip data - {}".format(response.status_code))
+        else:
+            _LOGGER.error("updating trip data got {}:{}".format(response.status_code,response.content))
         feed.ParseFromString(response.content)
         departure_times = {}
 
@@ -208,6 +210,7 @@ class PublicTransportData(object):
                         stop_time = stop.arrival.time
                     # Ignore arrival times in the past
                     if due_in_minutes(datetime.datetime.fromtimestamp(stop_time)) >= 0:
+                        _LOGGER.debug("...Adding route id {}, trip id {}, stop id {}, stop time {}".format(route_id,entity.trip_update.trip.trip_id,stop_id,stop_time))
                         details = StopDetails(
                             datetime.datetime.fromtimestamp(stop_time),
                             vehicle_positions.get(entity.trip_update.trip.trip_id)
@@ -225,7 +228,9 @@ class PublicTransportData(object):
         from google.transit import gtfs_realtime_pb2
         feed = gtfs_realtime_pb2.FeedMessage()
         response = requests.get(self._vehicle_position_url, headers=self._headers)
-        if response.status_code != 200:
+        if response.status_code == 200:
+            _LOGGER.info("Successfully updated vehicle positions - {}".format(response.status_code))
+        else:            
             _LOGGER.error("updating vehicle positions got {}:{}.".format(response.status_code, response.content))
         feed.ParseFromString(response.content)
         positions = {}
@@ -237,6 +242,7 @@ class PublicTransportData(object):
                 # Vehicle is not in service
                 continue
 
+            #_LOGGER.debug("......Adding route id {}, stop {}, stop_time {}".format(route_id,stop_id,stop_time))
             positions[vehicle.trip.trip_id] = vehicle.position
             
 
