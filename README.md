@@ -62,7 +62,7 @@ Configuration variables:
 
 ## Screenshot
 
-![screenshot](https://i.imgur.com/VMcX9aG.png)
+![screenshot](https://gtfsrtv2.s3-ap-southeast-2.amazonaws.com/GTFS-RT-V2.JPG)
 
 ## Finding Feeds
 
