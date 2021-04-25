@@ -160,8 +160,8 @@ class PublicTransportData(object):
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     def update(self):
         _LOGGER.info("trip_update_url: {}".format(self._trip_update_url))
-        _LOGGER.debug("vehicle_position_url: {}".format(self._vehicle_position_url))
-        _LOGGER.debug("route_delimiter: {0}".format(route_delimiter))
+        _LOGGER.info("vehicle_position_url: {}".format(self._vehicle_position_url))
+        _LOGGER.info("route_delimiter: {0}".format(self._route_delimiter))
 
         positions = self._get_vehicle_positions() if self._vehicle_position_url else {}
         self._update_route_statuses(positions)
