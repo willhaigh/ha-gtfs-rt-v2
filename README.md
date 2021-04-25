@@ -1,9 +1,9 @@
-# Home Assistant Realtime GTFS (Queensland, Australia)
+# Home Assistant Realtime GTFS V2
 
 This project contains a new sensor that provides real-time departure data for
 local transit systems that provide gtfs feeds.
 
-It is based on the excellent work that has been done previously by @zacs and @phardy.  It includes a number of modifications to work with realtime data for trains and buses provided by Translink in Queensland, Australia
+It is based on the excellent work that has been done previously by @zacs and @phardy.  Originally inspired by a desire to make the existing code work with realtime data for trains and buses provided by Translink in Queensland, Australia (who have unique route ids for each route/calendar combination) this version also contains a number of other improvements. 
 
 ## Installation (HACS) - Recommended
 0. Have [HACS](https://custom-components.github.io/hacs/installation/manual/) installed, this will allow you to easily update
@@ -28,18 +28,31 @@ sensor:
   - platform: gtfs_rt
     trip_update_url: 'https://gtfsrt.api.translink.com.au/api/realtime/SEQ/TripUpdates'
     vehicle_position_url: 'https://gtfsrt.api.translink.com.au/api/realtime/SEQ/VehiclePositions'
+    route_delimiter: -
     departures:
-    - name: Train to City
+    - name: Ferny Grove Train
       route: BNFG
       stopid: 600196
+      icon: mdi:train
+      service_type: Train
+    - name: Uni Qld Ferry
+      route: NHAM
+      stopid: 319665
+      icon: mdi:ferry
+      service_type: Ferry
+    - name: 1 0 7 Bus
+      route: 107
+      stopid: 4843
+      icon: mdi:bus
+      service_type: Bus
 ```
 
 Configuration variables:
 
-- **trip_update_url** (*Required*): Provides bus route etas. See the **Finding Feeds** section at the bottom of the page for more details on how to find these
-- **vehicle_position_url** (*Optional*): Provides live bus position tracking on the home assistant map
-- **api_key** (*Optional*): If provided, this key will be sent with API
-requests in an "Authorization" header.
+- **trip_update_url** (*Required*): Provides route etas. See the **Finding Feeds** section at the bottom of the page for more details on how to find these
+- **vehicle_position_url** (*Optional*): Provides live position tracking on the home assistant map
+- **api_key** (*Optional*): If provided, this key will be sent with API requests in an "Authorization" header.
+- **route_delimiter** (*Optional*): If provided, the text in the feed's route id before the delimiter is used as the route id.  Useful if the provided incorporates calendar ids into route ids.
 - **departures** (*Required*): A list of routes and departure locations to watch
 - **route** (*Optional*): The name of the gtfs route.  For que
 - **stopid** (*Optional*): The stopid for the location you want etas for
