@@ -73,7 +73,7 @@ use. Routes and stops can be found by clicking on the regular gtfs feed, and
 finding the id for the stop you are interested in. Please feel free to message
 me or open an issue if you find other good sources.
 
-GTFS providers should also publish a zip file containing static data, including route and stop information.  For example [Translink SEQ ZIP](https://gtfsrt.api.translink.com.au/GTFS/SEQ_GTFS.zip)
+GTFS providers should also publish a zip file containing static data, including route and stop information.  For example [Translink SEQ ZIP](https://gtfsrt.api.translink.com.au/GTFS/SEQ_GTFS.zip).  The route and stop ids you need to configure the realtime feed in HA are provided in this file.
 
 ## Reporting an Issue
 
