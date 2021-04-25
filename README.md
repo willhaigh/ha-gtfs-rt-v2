@@ -57,8 +57,8 @@ Configuration variables:
 - **name** (*Required*): The name of the sensor in HA.  When displaying on the map card HA generates the name using the first letters of the first 3 words.  So, 1<space>0<space>7<space>Bus shows as "107" on the map.  Different labels can be defined when displaying the sensor on an entiry card etc.
 - **name** (*Optional*): The name of the gtfs route (if route_delimiter is used, the text before the delimiter)
 - **stopid** (*Optional*): The stopid for the location you want etas for
-- **icon** (*Optional*): The icon used in the HA gui for this service
-- **service_type** 
+- **icon** (*Optional*): The icon used in the HA gui for this service (default is mdi:bus if non supplied)
+- **service_type** (*Optional*): The name used when created the "Next <service type>" attribute for the sensor in HA.  For example, Next Bus, Next Ferry etc etc (default is "Next Bus" if non supplied)
 
 ## Screenshot
 
