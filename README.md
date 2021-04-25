@@ -6,7 +6,7 @@ local transit systems that provide gtfs feeds.
 It is based on the excellent work that has been done previously by @zacs and @phardy.  Originally inspired by a desire to make the existing code work with realtime data for trains and buses provided by Translink in Queensland, Australia (who have unique route ids for each route/calendar combination) this version also contains a number of other improvements. 
 
 ## Installation (HACS) - Recommended
-0. Have [HACS](https://custom-components.github.io/hacs/installation/manual/) installed, this will allow you to easily update
+0. Have [HACS](https://hacs.xyz/) installed, this will allow you to easily update
 1. Add `https://github.com/mark1foley/ha-gtfs-rt-v2` as a [custom repository](https://hacs.xyz/docs/faq/custom_repositories/) as Type: Integration
 2. Click install under "GTFS-Realtime", restart your instance.
 
