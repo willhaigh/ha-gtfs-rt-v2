@@ -1,4 +1,4 @@
-# Home Assistant GTFS RealTime (rt) V2
+# Home Assistant GTFS RealTime (rt)
 
 This project contains a new sensor that provides real-time departure data for
 local transit systems that provide gtfs feeds.
@@ -62,7 +62,7 @@ Configuration variables:
 
 ## Screenshot
 
-![screenshot](https://gtfsrtv2.s3-ap-southeast-2.amazonaws.com/GTFS-RT-V2.JPG)
+![screenshot](GTFS-RT-V2.JPG)
 
 ## Finding Feeds
 
