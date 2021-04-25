@@ -58,7 +58,7 @@ Configuration variables:
 - **route** (*Required*): The name of the gtfs route (if route_delimiter is used, the text before the delimiter)
 - **stopid** (*Required*): The stopid for the location you want etas for
 - **icon** (*Optional*): The icon used in HA for the sensor (default is mdi:bus if non supplied)
-- **service_type** (*Optional*): The name used when created the "Next <service type>" attribute for the sensor in HA.  For example, Next Bus, Next Ferry etc etc (default is "Next Bus" if non supplied)
+- **service_type** (*Optional*): The name used when created the "Next <service type>" attribute for the sensor in HA.  For example, Next Bus, Next Ferry etc etc (default is "Next Service" if non supplied)
 
 ## Screenshot
 
@@ -72,6 +72,8 @@ gtfs feeds. Search for your city, and then look for a feed that is tagged with
 use. Routes and stops can be found by clicking on the regular gtfs feed, and
 finding the id for the stop you are interested in. Please feel free to message
 me or open an issue if you find other good sources.
+
+GTFS providers should also publish a zip file containing static data, including route and stop information.  For example [Translink SEQ ZIP](https://gtfsrt.api.translink.com.au/GTFS/SEQ_GTFS.zip)
 
 ## Reporting an Issue
 
