@@ -146,10 +146,6 @@ class PublicTransportSensor(Entity):
 class PublicTransportData(object):
     """The Class for handling the data retrieval."""
 
-    _LOGGER.info("trip_update_url: {}".format(trip_update_url))
-    #_LOGGER.debug("vehicle_position_url: {}".format(vehicle_position_url))
-    #_LOGGER.debug("route_delimiter: {0}".format(route_delimiter))
-
     def __init__(self, trip_update_url, vehicle_position_url=None, route_delimiter=None, api_key=None):
         """Initialize the info object."""
         self._trip_update_url = trip_update_url
@@ -163,6 +159,10 @@ class PublicTransportData(object):
         
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     def update(self):
+        _LOGGER.info("trip_update_url: {}".format(self._trip_update_url))
+        _LOGGER.debug("vehicle_position_url: {}".format(self._vehicle_position_url))
+        _LOGGER.debug("route_delimiter: {0}".format(route_delimiter))
+
         positions = self._get_vehicle_positions() if self._vehicle_position_url else {}
         self._update_route_statuses(positions)
 
