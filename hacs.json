@@ -1,5 +1,5 @@
 {
-  "name": "GTFS-Realtime",
+  "name": "ha-gtfs-rt-v2",
   "content_in_root": false,
   "render_readme": true,
   "iot_class": "Cloud Polling"
