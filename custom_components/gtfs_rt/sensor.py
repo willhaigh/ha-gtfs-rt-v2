@@ -116,6 +116,7 @@ class PublicTransportSensor(Entity):
             ATTR_STOP_ID: self._stop,
             ATTR_ROUTE: self._route
         }
+        _LOGGER.info("Update sensor route {}".format(self._route)
         if len(next_services) > 0:
             attrs[ATTR_DUE_AT] = next_services[0].arrival_time.strftime('%I:%M %p') if len(next_services) > 0 else '-'
             if next_services[0].position:
@@ -123,7 +124,6 @@ class PublicTransportSensor(Entity):
                 attrs[ATTR_LONGITUDE] = next_services[0].position.longitude
         if len(next_services) > 1:
             attrs[ATTR_NEXT_UP] = next_services[1].arrival_time.strftime('%I:%M %p') if len(next_services) > 1 else '-'
-        _LOGGER.info("Update sensor attributes")
         return attrs
 
     @property
@@ -142,7 +142,6 @@ class PublicTransportSensor(Entity):
     def update(self):
         """Get the latest data from opendata.ch and update the states."""
         self.data.update()
-        _LOGGER.info("Update sensor")
 
 
 class PublicTransportData(object):
@@ -243,11 +242,11 @@ class PublicTransportData(object):
         for entity in feed.entity:
             vehicle = entity.vehicle
 
-            if not vehicle.trip.route_id:
+            if not vehicle.trip.trip_id:
                 # Vehicle is not in service
                 continue
 
-            _LOGGER.debug("......Adding position for trip id, stop_time {} position latitude {} longitude {} ".format(vehicle.trip.trip_id,vehicle.position.latitude,vehicle.position.longitude))
+            _LOGGER.debug("......Adding position for trip id {} position latitude {} longitude {} ".format(vehicle.trip.trip_id,vehicle.position.latitude,vehicle.position.longitude))
             positions[vehicle.trip.trip_id] = vehicle.position
             
 
