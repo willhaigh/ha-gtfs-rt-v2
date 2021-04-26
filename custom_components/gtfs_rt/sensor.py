@@ -123,6 +123,7 @@ class PublicTransportSensor(Entity):
                 attrs[ATTR_LONGITUDE] = next_services[0].position.longitude
         if len(next_services) > 1:
             attrs[ATTR_NEXT_UP] = next_services[1].arrival_time.strftime('%I:%M %p') if len(next_services) > 1 else '-'
+        _LOGGER.info("Update sensor attributes")
         return attrs
 
     @property
@@ -141,6 +142,7 @@ class PublicTransportSensor(Entity):
     def update(self):
         """Get the latest data from opendata.ch and update the states."""
         self.data.update()
+        _LOGGER.info("Update sensor")
 
 
 class PublicTransportData(object):
@@ -162,6 +164,7 @@ class PublicTransportData(object):
         _LOGGER.info("trip_update_url: {}".format(self._trip_update_url))
         _LOGGER.info("vehicle_position_url: {}".format(self._vehicle_position_url))
         _LOGGER.info("route_delimiter: {0}".format(self._route_delimiter))
+        _LOGGER.info("header: {0}".format(self._headers))
 
         positions = self._get_vehicle_positions() if self._vehicle_position_url else {}
         self._update_route_statuses(positions)
@@ -196,6 +199,8 @@ class PublicTransportData(object):
                 else:
                     route_id = entity.trip_update.trip.route_id
                 
+                _LOGGER.debug("...Feed Route Id {} changed to {}".format(entity.trip_update.trip.route_id,route_id))
+
                 if route_id not in departure_times:
                     departure_times[route_id] = {}
 
@@ -242,7 +247,7 @@ class PublicTransportData(object):
                 # Vehicle is not in service
                 continue
 
-            #_LOGGER.debug("......Adding route id {}, stop {}, stop_time {}".format(route_id,stop_id,stop_time))
+            _LOGGER.debug("......Adding position for trip id, stop_time {} position latitude {} longitude {} ".format(vehicle.trip.trip_id,vehicle.position.latitude,vehicle.position.longitude))
             positions[vehicle.trip.trip_id] = vehicle.position
             
 
