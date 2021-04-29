@@ -116,7 +116,6 @@ class PublicTransportSensor(Entity):
             ATTR_STOP_ID: self._stop,
             ATTR_ROUTE: self._route
         }
-        _LOGGER.info("Update sensor route {}".format(self._route)
         if len(next_services) > 0:
             attrs[ATTR_DUE_AT] = next_services[0].arrival_time.strftime('%I:%M %p') if len(next_services) > 0 else '-'
             if next_services[0].position:
