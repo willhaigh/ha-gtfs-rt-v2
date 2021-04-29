@@ -163,7 +163,7 @@ class PublicTransportSensor(Entity):
         except:
             _LOGGER.info("...{0} not defined".format(ATTR_LONGITUDE))
         try:
-            _LOGGER.info("...Next {0}: {1}".format(self._service_type,self.device_state_attributes["Next " + self._service_type]))
+            _LOGGER.info("...Next {0}: {1}".format(self._service_type,self.device_state_attributes["Next  " + self._service_type]))
         except:
             _LOGGER.info("...{0} not defined".format("Next " + self._service_type))
 
@@ -273,5 +273,4 @@ class PublicTransportData(object):
             _LOGGER.debug("......Adding position for trip id {} position latitude {} longitude {} ".format(vehicle.trip.trip_id,vehicle.position.latitude,vehicle.position.longitude))
             positions[vehicle.trip.trip_id] = vehicle.position
             
-
         return positions
