@@ -142,6 +142,30 @@ class PublicTransportSensor(Entity):
     def update(self):
         """Get the latest data from opendata.ch and update the states."""
         self.data.update()
+        _LOGGER.info("Sensor Update:")
+        _LOGGER.info("...Name: {0}".format(self._name))
+        _LOGGER.info("...{0}: {1}".format(ATTR_ROUTE,self._route))
+        _LOGGER.info("...{0}: {1}".format(ATTR_STOP_ID,self._stop))
+        _LOGGER.info("...{0}: {1}".format(ATTR_ICON,self._icon))
+        _LOGGER.info("...Service Type: {0}".format(self._service_type))
+        _LOGGER.info("...{0}: {1}".format("unit_of_measurement",self.unit_of_measurement))
+        _LOGGER.info("...{0}: {1}".format(ATTR_DUE_IN,self.state))
+        try:
+            _LOGGER.info("...{0}: {1}".format(ATTR_DUE_AT,self.device_state_attributes[ATTR_DUE_AT]))
+        except:
+            _LOGGER.info("...{0} not defined".format(ATTR_DUE_AT))
+        try:
+            _LOGGER.info("...{0}: {1}".format(ATTR_LATITUDE,self.device_state_attributes[ATTR_LATITUDE]))
+        except:
+            _LOGGER.info("...{0} not defined".format(ATTR_LATITUDE))
+        try:
+            _LOGGER.info("...{0}: {1}".format(ATTR_LONGITUDE,self.device_state_attributes[ATTR_LONGITUDE]))
+        except:
+            _LOGGER.info("...{0} not defined".format(ATTR_LONGITUDE))
+        try:
+            _LOGGER.info("...Next {0}: {1}".format(self._service_type,self.device_state_attributes["Next " + self._service_type]))
+        except:
+            _LOGGER.info("...{0} not defined".format("Next " + self._service_type))
 
 
 class PublicTransportData(object):
