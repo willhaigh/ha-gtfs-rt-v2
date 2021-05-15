@@ -22,6 +22,7 @@ ATTR_STOP_ID = "Stop ID"
 ATTR_ROUTE = "Route"
 ATTR_DUE_IN = "Due in"
 ATTR_DUE_AT = "Due at"
+ATTR_DELAYED_BY = "Delayed by"
 ATTR_NEXT_UP = "Next Service"
 ATTR_ICON = "Icon"
 
@@ -114,7 +115,8 @@ class PublicTransportSensor(Entity):
         attrs = {
             ATTR_DUE_IN: self.state,
             ATTR_STOP_ID: self._stop,
-            ATTR_ROUTE: self._route
+            ATTR_ROUTE: self._route,
+            ATTR_DELAYED_BY: self._delay
         }
         if len(next_services) > 0:
             attrs[ATTR_DUE_AT] = next_services[0].arrival_time.strftime('%I:%M %p') if len(next_services) > 0 else '-'
@@ -233,13 +235,16 @@ class PublicTransportData(object):
                     # Use stop arrival time; fall back on stop departure time if not available
                     if stop.arrival.time == 0:
                         stop_time = stop.departure.time
+                        delay_time = stop.departure.delay
                     else:
                         stop_time = stop.arrival.time
+                        delay_time = stop.arrival.delay
                     # Ignore arrival times in the past
                     if due_in_minutes(datetime.datetime.fromtimestamp(stop_time)) >= 0:
                         _LOGGER.debug("...Adding route id {}, trip id {}, stop id {}, stop time {}".format(route_id,entity.trip_update.trip.trip_id,stop_id,stop_time))
                         details = StopDetails(
                             datetime.datetime.fromtimestamp(stop_time),
+                            delay_time,
                             vehicle_positions.get(entity.trip_update.trip.trip_id)
                         )
                         departure_times[route_id][stop_id].append(details)

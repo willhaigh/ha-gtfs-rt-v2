@@ -1,8 +1,8 @@
 {
-    "domain": "gtfs_rt",
-    "name": "GTFS-Realtime",
-    "documentation": "https://github.com/mark1foley/ha-gtfs-rt-v2",
-    "issue_tracker": "https://github.com/mark1foley/ha-gtfs-rt-v2/issues",
+    "domain": "gtfs_rt_will",
+    "name": "GTFS-Realtime-Will",
+    "documentation": "https://github.com/willhaigh/ha-gtfs-rt-v2",
+    "issue_tracker": "https://github.com/willhaigh/ha-gtfs-rt-v2/issues",
     "dependencies": [],
     "codeowners": ["@mark1foley"],
     "requirements": [
