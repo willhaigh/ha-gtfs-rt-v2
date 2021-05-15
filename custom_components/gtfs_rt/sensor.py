@@ -198,9 +198,10 @@ class PublicTransportData(object):
         from google.transit import gtfs_realtime_pb2
 
         class StopDetails:
-            def __init__(self, arrival_time, position):
+            def __init__(self, arrival_time, position, delay):
                 self.arrival_time = arrival_time
                 self.position = position
+                self.delay = delay
 
         feed = gtfs_realtime_pb2.FeedMessage()
         response = requests.get(self._trip_update_url, headers=self._headers)
@@ -244,8 +245,8 @@ class PublicTransportData(object):
                         _LOGGER.debug("...Adding route id {}, trip id {}, stop id {}, stop time {}".format(route_id,entity.trip_update.trip.trip_id,stop_id,stop_time))
                         details = StopDetails(
                             datetime.datetime.fromtimestamp(stop_time),
-                            delay_time,
-                            vehicle_positions.get(entity.trip_update.trip.trip_id)
+                            vehicle_positions.get(entity.trip_update.trip.trip_id),
+                            delay_time
                         )
                         departure_times[route_id][stop_id].append(details)
 
