@@ -116,7 +116,7 @@ class PublicTransportSensor(Entity):
             ATTR_DUE_IN: self.state,
             ATTR_STOP_ID: self._stop,
             ATTR_ROUTE: self._route,
-            ATTR_DELAYED_BY: self._delay
+            ATTR_DELAYED_BY: self.delay
         }
         if len(next_services) > 0:
             attrs[ATTR_DUE_AT] = next_services[0].arrival_time.strftime('%I:%M %p') if len(next_services) > 0 else '-'
